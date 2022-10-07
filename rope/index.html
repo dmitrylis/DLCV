@@ -135,6 +135,9 @@
     const canvas = document.getElementById("myCanvas")
     const context = canvas.getContext("2d")
 
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
     canvas.onmousemove = function(e) {
       vertexes[0].pos.x = e.clientX
       vertexes[0].pos.y = e.clientY
@@ -144,14 +147,11 @@
     }
 
     canvas.ontouchmove = function(e) {
-      vertexes[0].pos.x = e.touches[0].screenX
-      vertexes[0].pos.y = e.touches[0].screenY
-    }
+      e.preventDefault()
 
-    // canvas.addEventListener('touchstart', handleStart);
-    // canvas.addEventListener('touchend', handleEnd);
-    // canvas.addEventListener('touchcancel', handleCancel);
-    // canvas.addEventListener('touchmove', handleMove);
+      vertexes[0].pos.x = e.touches[0].clientX
+      vertexes[0].pos.y = e.touches[0].clientY
+    }
 
     setInterval(function() {
       time += 0.01
