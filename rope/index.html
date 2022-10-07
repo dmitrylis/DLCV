@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Drawing on Canvas</title>
+
+  <script src="./victor.js"></script>
+
+  <script>
+    class MyVertex {
+      constructor(pos, locked) {
+        this.pos = pos
+        this.prevPos = pos.clone()
+        this.locked = locked
+      }
+    }
+
+    class MyEdge {
+      constructor(vertexA, vertexB) {
+        this.vertexA = vertexA
+        this.vertexB = vertexB
+
+        var posA2 = vertexA.pos.clone()
+        var posB2 = vertexB.pos.clone()
+        this.length = posA2.subtract(posB2).length()
+      }
+    }
+
+    function drawLine(context, x1, y1, x2, y2, size) {
+      context.beginPath()
+
+      context.moveTo(x1, y1)
+      context.lineTo(x2, y2)
+
+      context.lineWidth = size
+      context.lineCap = "round"
+      context.stroke()
+    }
+
+    function drawPoint(context, x, y, color, size) {
+      context.beginPath()
+      context.fillStyle = color
+      context.arc(x, y, size, 0 * Math.PI, 2 * Math.PI)
+      context.fill()
+    }
+
+    window.onload = function() {
+      const gravity = new Victor(0.0, 2.8)
+      const numOfIterations = 100
+      const epsilon = 20
+
+      const vertexes = [
+        new MyVertex(new Victor(100, 100), true)
+      , new MyVertex(new Victor(110, 100), false)
+      , new MyVertex(new Victor(120, 100), false)
+      , new MyVertex(new Victor(130, 100), false)
+      , new MyVertex(new Victor(140, 100), false)
+      , new MyVertex(new Victor(150, 100), false)
+      , new MyVertex(new Victor(160, 100), false)
+      , new MyVertex(new Victor(170, 100), false)
+      , new MyVertex(new Victor(180, 100), false)
+      , new MyVertex(new Victor(190, 100), false)
+      , new MyVertex(new Victor(200, 100), false)
+      , new MyVertex(new Victor(210, 100), false)
+      , new MyVertex(new Victor(220, 100), false)
+      , new MyVertex(new Victor(230, 100), false)
+      , new MyVertex(new Victor(240, 100), false)
+      , new MyVertex(new Victor(250, 100), false)
+      , new MyVertex(new Victor(260, 100), false)
+      , new MyVertex(new Victor(270, 100), false)
+      , new MyVertex(new Victor(280, 100), false)
+      , new MyVertex(new Victor(290, 100), false)
+      , new MyVertex(new Victor(300, 100), false)
+      ]
+
+      const edges = [
+        new MyEdge(vertexes[0],  vertexes[1])
+      , new MyEdge(vertexes[1],  vertexes[2])
+      , new MyEdge(vertexes[2],  vertexes[3])
+      , new MyEdge(vertexes[3],  vertexes[4])
+      , new MyEdge(vertexes[4],  vertexes[5])
+      , new MyEdge(vertexes[5],  vertexes[6])
+      , new MyEdge(vertexes[6],  vertexes[7])
+      , new MyEdge(vertexes[7],  vertexes[8])
+      , new MyEdge(vertexes[8],  vertexes[9])
+      , new MyEdge(vertexes[9],  vertexes[10])
+      , new MyEdge(vertexes[10], vertexes[11])
+      , new MyEdge(vertexes[11], vertexes[12])
+      , new MyEdge(vertexes[12], vertexes[13])
+      , new MyEdge(vertexes[13], vertexes[14])
+      , new MyEdge(vertexes[14], vertexes[15])
+      , new MyEdge(vertexes[15], vertexes[16])
+      , new MyEdge(vertexes[16], vertexes[17])
+      , new MyEdge(vertexes[17], vertexes[18])
+      , new MyEdge(vertexes[18], vertexes[19])
+      , new MyEdge(vertexes[19], vertexes[20])
+      ]
+
+      onmousemove = function(e) {
+        vertexes[0].pos.x = e.clientX
+        vertexes[0].pos.y = e.clientY
+      }
+
+      let time = 0.0
+
+      function simulate() {
+        if (vertexes.length === 0 || edges.length === 0) {
+            return
+        }
+
+        for (const vertex of vertexes) {
+            if (!vertex.locked) {
+                const posBefore = vertex.pos.clone()
+
+                vertex.pos.add(vertex.pos.clone().subtract(vertex.prevPos))
+                vertex.pos.add(gravity.clone().multiply(new Victor(time, time)))
+
+                vertex.prevPos = posBefore
+            }
+        }
+
+        for (let j = 0; j < numOfIterations; ++j) {
+            for (const edge of edges) {
+
+                const edgeCenter = edge.vertexA.pos.clone().add(edge.vertexB.pos).multiply(new Victor(0.5, 0.5))
+                const edgeDir = edge.vertexA.pos.clone().subtract(edge.vertexB.pos).normalize()
+
+                if (!edge.vertexA.locked) {
+                    edge.vertexA.pos = edgeCenter.clone().add(edgeDir.clone().multiply(new Victor(edge.length * 0.5, edge.length * 0.5)))
+                }
+
+                if (!edge.vertexB.locked) {
+                    edge.vertexB.pos = edgeCenter.clone().subtract(edgeDir.clone().multiply(new Victor(edge.length * 0.5, edge.length * 0.5)))
+                }
+            }
+        }
+    }
+
+    const canvas = document.getElementById("myCanvas")
+    const context = canvas.getContext("2d")
+
+      setInterval(function() {
+        time += 0.01
+
+        simulate()
+
+        context.clearRect(0, 0, canvas.width, canvas.height)
+
+        for (const edge of edges) {
+          drawLine(context, edge.vertexA.pos.x, edge.vertexA.pos.y, edge.vertexB.pos.x, edge.vertexB.pos.y, 10)
+        }
+
+        for (const vertex of vertexes) {
+          drawPoint(context, vertex.pos.x, vertex.pos.y, "#FF0000", 3)
+        }
+      }, 33);
+    };
+  </script>
+</head>
+
+<body>
+  <canvas id="myCanvas" width="1000" height="1000"></canvas>
+</body>
+
+</html>
