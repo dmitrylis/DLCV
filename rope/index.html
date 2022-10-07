@@ -97,11 +97,6 @@
       , new MyEdge(vertexes[19], vertexes[20])
       ]
 
-      onmousemove = function(e) {
-        vertexes[0].pos.x = e.clientX
-        vertexes[0].pos.y = e.clientY
-      }
-
       let time = 0.0
 
       function simulate() {
@@ -140,21 +135,39 @@
     const canvas = document.getElementById("myCanvas")
     const context = canvas.getContext("2d")
 
-      setInterval(function() {
-        time += 0.01
+    canvas.onmousemove = function(e) {
+      vertexes[0].pos.x = e.clientX
+      vertexes[0].pos.y = e.clientY
+    }
 
-        simulate()
+    canvas.ontouchstart = function(e) {
+    }
 
-        context.clearRect(0, 0, canvas.width, canvas.height)
+    canvas.ontouchmove = function(e) {
+      vertexes[0].pos.x = e.touches[0].screenX
+      vertexes[0].pos.y = e.touches[0].screenY
+    }
 
-        for (const edge of edges) {
-          drawLine(context, edge.vertexA.pos.x, edge.vertexA.pos.y, edge.vertexB.pos.x, edge.vertexB.pos.y, 10)
-        }
+    // canvas.addEventListener('touchstart', handleStart);
+    // canvas.addEventListener('touchend', handleEnd);
+    // canvas.addEventListener('touchcancel', handleCancel);
+    // canvas.addEventListener('touchmove', handleMove);
 
-        for (const vertex of vertexes) {
-          drawPoint(context, vertex.pos.x, vertex.pos.y, "#FF0000", 3)
-        }
-      }, 33);
+    setInterval(function() {
+      time += 0.01
+
+      simulate()
+
+      context.clearRect(0, 0, canvas.width, canvas.height)
+
+      for (const edge of edges) {
+        drawLine(context, edge.vertexA.pos.x, edge.vertexA.pos.y, edge.vertexB.pos.x, edge.vertexB.pos.y, 10)
+      }
+
+      for (const vertex of vertexes) {
+        drawPoint(context, vertex.pos.x, vertex.pos.y, "#FF0000", 3)
+      }
+    }, 33);
     };
   </script>
 </head>
