@@ -52,49 +52,70 @@
 
       const vertexes = [
         new MyVertex(new Victor(100, 100), true)
-      , new MyVertex(new Victor(110, 100), false)
-      , new MyVertex(new Victor(120, 100), false)
-      , new MyVertex(new Victor(130, 100), false)
-      , new MyVertex(new Victor(140, 100), false)
       , new MyVertex(new Victor(150, 100), false)
-      , new MyVertex(new Victor(160, 100), false)
-      , new MyVertex(new Victor(170, 100), false)
-      , new MyVertex(new Victor(180, 100), false)
-      , new MyVertex(new Victor(190, 100), false)
-      , new MyVertex(new Victor(200, 100), false)
-      , new MyVertex(new Victor(210, 100), false)
-      , new MyVertex(new Victor(220, 100), false)
-      , new MyVertex(new Victor(230, 100), false)
-      , new MyVertex(new Victor(240, 100), false)
+      , new MyVertex(new Victor(200, 100), true)
       , new MyVertex(new Victor(250, 100), false)
-      , new MyVertex(new Victor(260, 100), false)
-      , new MyVertex(new Victor(270, 100), false)
-      , new MyVertex(new Victor(280, 100), false)
-      , new MyVertex(new Victor(290, 100), false)
-      , new MyVertex(new Victor(300, 100), false)
+      , new MyVertex(new Victor(300, 100), true)
+
+      , new MyVertex(new Victor(100, 150), false)
+      , new MyVertex(new Victor(150, 150), false)
+      , new MyVertex(new Victor(200, 150), false)
+      , new MyVertex(new Victor(250, 150), false)
+      , new MyVertex(new Victor(300, 150), false)
+
+      , new MyVertex(new Victor(100, 200), false)
+      , new MyVertex(new Victor(150, 200), false)
+      , new MyVertex(new Victor(200, 200), false)
+      , new MyVertex(new Victor(250, 200), false)
+      , new MyVertex(new Victor(300, 200), false)
+
+      , new MyVertex(new Victor(100, 250), false)
+      , new MyVertex(new Victor(150, 250), false)
+      , new MyVertex(new Victor(200, 250), false)
+      , new MyVertex(new Victor(250, 250), false)
+      , new MyVertex(new Victor(300, 250), false)
       ]
 
       const edges = [
-        new MyEdge(vertexes[0],  vertexes[1])
-      , new MyEdge(vertexes[1],  vertexes[2])
-      , new MyEdge(vertexes[2],  vertexes[3])
-      , new MyEdge(vertexes[3],  vertexes[4])
-      , new MyEdge(vertexes[4],  vertexes[5])
-      , new MyEdge(vertexes[5],  vertexes[6])
-      , new MyEdge(vertexes[6],  vertexes[7])
-      , new MyEdge(vertexes[7],  vertexes[8])
-      , new MyEdge(vertexes[8],  vertexes[9])
-      , new MyEdge(vertexes[9],  vertexes[10])
+        // horizontal
+        new MyEdge(vertexes[0], vertexes[1])
+      , new MyEdge(vertexes[1], vertexes[2])
+      , new MyEdge(vertexes[2], vertexes[3])
+      , new MyEdge(vertexes[3], vertexes[4])
+
+      , new MyEdge(vertexes[5], vertexes[6])
+      , new MyEdge(vertexes[6], vertexes[7])
+      , new MyEdge(vertexes[7], vertexes[8])
+      , new MyEdge(vertexes[8], vertexes[9])
+
       , new MyEdge(vertexes[10], vertexes[11])
       , new MyEdge(vertexes[11], vertexes[12])
       , new MyEdge(vertexes[12], vertexes[13])
       , new MyEdge(vertexes[13], vertexes[14])
-      , new MyEdge(vertexes[14], vertexes[15])
+
       , new MyEdge(vertexes[15], vertexes[16])
       , new MyEdge(vertexes[16], vertexes[17])
       , new MyEdge(vertexes[17], vertexes[18])
       , new MyEdge(vertexes[18], vertexes[19])
-      , new MyEdge(vertexes[19], vertexes[20])
+
+      // vertical
+      , new MyEdge(vertexes[0], vertexes[5])
+      , new MyEdge(vertexes[1], vertexes[6])
+      , new MyEdge(vertexes[2], vertexes[7])
+      , new MyEdge(vertexes[3], vertexes[8])
+      , new MyEdge(vertexes[4], vertexes[9])
+
+      , new MyEdge(vertexes[5], vertexes[10])
+      , new MyEdge(vertexes[6], vertexes[11])
+      , new MyEdge(vertexes[7], vertexes[12])
+      , new MyEdge(vertexes[8], vertexes[13])
+      , new MyEdge(vertexes[9], vertexes[14])
+
+      , new MyEdge(vertexes[10], vertexes[15])
+      , new MyEdge(vertexes[11], vertexes[16])
+      , new MyEdge(vertexes[12], vertexes[17])
+      , new MyEdge(vertexes[13], vertexes[18])
+      , new MyEdge(vertexes[14], vertexes[19])
       ]
 
       let time = 0.0
