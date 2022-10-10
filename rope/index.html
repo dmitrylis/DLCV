@@ -143,6 +143,12 @@
       }
     }
 
+    canvas.onmousemove = function(e) {
+      if (currentVertex) {
+          currentVertex.pos = new Victor(e.clientX, e.clientY)
+      }
+    }
+
     canvas.onmouseup = function(e) {
       if (e.button === 0) {
           if (currentVertex) {
@@ -152,9 +158,12 @@
       }
     }
 
-    canvas.onmousemove = function(e) {
-      if (currentVertex) {
-          currentVertex.pos = new Victor(e.clientX, e.clientY)
+    canvas.onmouseleave = function(e) {
+      if (e.button === 0) {
+          if (currentVertex) {
+              currentVertex.locked = wasLocked
+              currentVertex = null
+          }
       }
     }
 
