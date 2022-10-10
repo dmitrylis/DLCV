@@ -256,7 +256,8 @@
       }
 
       for (const vertex of vertexes) {
-        drawPoint(context, vertex.pos.x, vertex.pos.y, "#FF0000", 3)
+        const col = (currentVertex === vertex) ? "#ffc700" : (vertex.locked ? "#ff0000" : "#b4b4b4")
+        drawPoint(context, vertex.pos.x, vertex.pos.y, col, 3)
       }
     }, 33);
     };
