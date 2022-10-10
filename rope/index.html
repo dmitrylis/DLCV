@@ -152,7 +152,7 @@
       }
     }
 
-    canvas.onmousemove = function(e) {
+    canvas.onmousecabcelled = function(e) {
       if (currentVertex) {
           currentVertex.pos = new Victor(e.clientX, e.clientY)
       }
@@ -192,6 +192,13 @@
     }
 
     canvas.ontouchend = function(e) {
+        if (currentVertex) {
+            currentVertex.locked = wasLocked
+            currentVertex = null
+        }
+    }
+
+    canvas.ontouchcancel = function(e) {
         if (currentVertex) {
             currentVertex.locked = wasLocked
             currentVertex = null
