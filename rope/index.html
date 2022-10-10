@@ -159,19 +159,89 @@
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
+    var currentVertex = null
+    var wasLocked = false
+
+    canvas.onmousedown = function(e) {
+      if (e.button === 0) {
+          if (vertexes.length === 0) {
+              return
+          }
+
+          let minLength = Number.MAX_SAFE_INTEGER
+          const mousePos = new Victor(e.clientX, e.clientY)
+
+          for (const vertex of vertexes) {
+              const currentLength = mousePos.clone().subtract(vertex.pos).length()
+              if (currentLength < minLength) {
+                  minLength = currentLength
+
+                  if (minLength < epsilon) {
+                      currentVertex = vertex
+                  }
+              }
+          }
+
+          if (currentVertex) {
+              wasLocked = currentVertex.locked
+              currentVertex.locked = true
+          }
+      }
+    }
+
+    canvas.onmouseup = function(e) {
+      if (e.button === 0) {
+          if (currentVertex) {
+              currentVertex.locked = wasLocked
+              currentVertex = null
+          }
+      }
+    }
+
     canvas.onmousemove = function(e) {
-      vertexes[0].pos.x = e.clientX
-      vertexes[0].pos.y = e.clientY
+      if (currentVertex) {
+          currentVertex.pos = new Victor(e.clientX, e.clientY)
+      }
     }
 
     canvas.ontouchstart = function(e) {
+      if (vertexes.length === 0) {
+          return
+      }
+
+      let minLength = Number.MAX_SAFE_INTEGER
+      const mousePos = new Victor(e.touches[0].clientX, e.touches[0].clientY)
+
+      for (const vertex of vertexes) {
+          const currentLength = mousePos.clone().subtract(vertex.pos).length()
+          if (currentLength < minLength) {
+              minLength = currentLength
+
+              if (minLength < epsilon) {
+                  currentVertex = vertex
+              }
+          }
+      }
+
+      if (currentVertex) {
+          wasLocked = currentVertex.locked
+          currentVertex.locked = true
+      }
     }
 
     canvas.ontouchmove = function(e) {
       e.preventDefault()
 
-      vertexes[0].pos.x = e.touches[0].clientX
-      vertexes[0].pos.y = e.touches[0].clientY
+      if (currentVertex) {
+          currentVertex.pos = new Victor(e.touches[0].clientX, e.touches[0].clientY)
+      }
+    }
+
+    canvas.ontouchend = function(e) {
+        if (currentVertex) {
+            currentVertex.locked = wasLocked
+            currentVertex = null
+        }
     }
 
     setInterval(function() {
