@@ -152,7 +152,7 @@
       }
     }
 
-    canvas.onmousecabcelled = function(e) {
+    canvas.onmousemove = function(e) {
       if (currentVertex) {
           currentVertex.pos = new Victor(e.clientX, e.clientY)
       }
