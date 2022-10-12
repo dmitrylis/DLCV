@@ -53,11 +53,11 @@
       const vertexes = []
       const edges = []
 
-      function generateGrid(w, h) {
+      function generateGrid(w, h, density) {
         for (let i = 0; i < h; ++i) {
           for (let j = 0; j < w; ++j) {
             const isLocked = (w === 1 || h === 1) ? (i === 0) && (j === 0) : (i === 0) && (j % 2 === 0)
-            vertexes.push(new MyVertex(new Victor(100 + j * 50, 100 + i * 50), isLocked))
+            vertexes.push(new MyVertex(new Victor(100 + j * density, 100 + i * density), isLocked))
 
             if (j > 0) {
                 edges.push(new MyEdge(vertexes[vertexes.length - 2], vertexes[vertexes.length - 1]))
@@ -74,34 +74,37 @@
 
       function simulate() {
         if (vertexes.length === 0 || edges.length === 0) {
-            return
+          return
         }
 
         for (const vertex of vertexes) {
-            if (!vertex.locked) {
-                const posBefore = vertex.pos.clone()
+          if (!vertex.locked) {
+            const posBefore = vertex.pos.clone()
 
-                vertex.pos.add(vertex.pos.clone().subtract(vertex.prevPos))
-                vertex.pos.add(gravity.clone().multiply(new Victor(time, time)))
+            vertex.pos.add(vertex.pos.clone().subtract(vertex.prevPos))
+            vertex.pos.add(gravity.clone().multiply(new Victor(time, time)))
 
-                vertex.prevPos = posBefore
-            }
+            vertex.prevPos = posBefore
+          }
         }
 
         for (let j = 0; j < numOfIterations; ++j) {
-            for (const edge of edges) {
+          for (const edge of edges) {
+            const distanceVector = edge.vertexA.pos.clone().subtract(edge.vertexB.pos)
+            const distance = distanceVector.length()
+            const direction = distanceVector.clone().normalize()
+            const error = distance - edge.length
 
-                const edgeCenter = edge.vertexA.pos.clone().add(edge.vertexB.pos).multiply(new Victor(0.5, 0.5))
-                const edgeDir = edge.vertexA.pos.clone().subtract(edge.vertexB.pos).normalize()
-
-                if (!edge.vertexA.locked) {
-                    edge.vertexA.pos = edgeCenter.clone().add(edgeDir.clone().multiply(new Victor(edge.length * 0.5, edge.length * 0.5)))
-                }
-
-                if (!edge.vertexB.locked) {
-                    edge.vertexB.pos = edgeCenter.clone().subtract(edgeDir.clone().multiply(new Victor(edge.length * 0.5, edge.length * 0.5)))
-                }
+            if (!edge.vertexA.locked) {
+              const coeff = error * (edge.vertexB.locked ? 1.0 : 0.5)
+              edge.vertexA.pos = edge.vertexA.pos.clone().subtract(direction.clone().multiply(new Victor(coeff, coeff)))
             }
+
+            if (!edge.vertexB.locked) {
+              const coeff = error * (edge.vertexA.locked ? 1.0 : 0.5)
+              edge.vertexB.pos = edge.vertexB.pos.clone().add(direction.clone().multiply(new Victor(coeff, coeff)))
+            }
+          }
         }
     }
 
@@ -114,7 +117,7 @@
     var currentVertex = null
     var wasLocked = false
 
-    generateGrid(9, 6)
+    generateGrid(15, 11, 35)
 
     canvas.onmousedown = function(e) {
       if (e.button === 0) {
