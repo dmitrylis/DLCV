@@ -46,9 +46,10 @@
     }
 
     window.onload = function() {
-      const gravity = new Victor(0.0, 2.8)
-      const numOfIterations = 100
+      const gravity = new Victor(0.0, 9.8)
+      const numOfIterations = 20
       const epsilon = 20
+      const deltaTime = 0.2
 
       const vertexes = []
       const edges = []
@@ -70,8 +71,6 @@
         }
       }
 
-      let time = 0.0
-
       function simulate() {
         if (vertexes.length === 0 || edges.length === 0) {
           return
@@ -82,7 +81,7 @@
             const posBefore = vertex.pos.clone()
 
             vertex.pos.add(vertex.pos.clone().subtract(vertex.prevPos))
-            vertex.pos.add(gravity.clone().multiply(new Victor(time, time)))
+            vertex.pos.add(gravity.clone().multiply(new Victor(deltaTime, deltaTime)))
 
             vertex.prevPos = posBefore
           }
@@ -117,7 +116,7 @@
     var currentVertex = null
     var wasLocked = false
 
-    generateGrid(15, 11, 35)
+    generateGrid(21, 21, 25)
 
     canvas.onmousedown = function(e) {
       if (e.button === 0) {
@@ -218,19 +217,17 @@
     }
 
     setInterval(function() {
-      time += 0.01
-
       simulate()
 
       context.clearRect(0, 0, canvas.width, canvas.height)
 
       for (const edge of edges) {
-        drawLine(context, edge.vertexA.pos.x, edge.vertexA.pos.y, edge.vertexB.pos.x, edge.vertexB.pos.y, 10)
+        drawLine(context, edge.vertexA.pos.x, edge.vertexA.pos.y, edge.vertexB.pos.x, edge.vertexB.pos.y, 6)
       }
 
       for (const vertex of vertexes) {
         const col = (currentVertex === vertex) ? "#ffc700" : (vertex.locked ? "#ff0000" : "#b4b4b4")
-        drawPoint(context, vertex.pos.x, vertex.pos.y, col, 3)
+        drawPoint(context, vertex.pos.x, vertex.pos.y, col, 2)
       }
     }, 33);
     };
